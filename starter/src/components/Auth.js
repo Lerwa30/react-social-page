@@ -1,4 +1,5 @@
 import {useState} from 'react'
+import axios from 'axios';
  
 const Auth = () => {
    const [username, setUsername] = useState('')
@@ -7,6 +8,18 @@ const Auth = () => {
  
    const submitHandler = e => {
        e.preventDefault()
+
+       const body = {
+        username,
+        password
+       };
+
+       axios.post(register ? 'https://socialmtn.devmountain.com/register' : 'https://socialmtn.devmountain.com/login', body)
+       .then(res => console.log('AFTER AUTH', res.data))
+       .catch(error => {
+        setUsername('');
+        setPassword('');
+       });
  
        console.log('submitHandler called')
        console.log(username, password)
