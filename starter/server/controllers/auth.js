@@ -1,9 +1,9 @@
 module.exports = {
-login: () => {
-    console.log('login');
-},
+  login: () => {
+    console.log("login");
+  },
 
-logout: () => {
-    console.log('logout');
-}
-}
+  register: () => {
+    console.log("logout");
+  },
+};
