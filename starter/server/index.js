@@ -6,6 +6,13 @@ const cors = require('cors');
 const {getAllPosts, getCurrentUserPosts, addPost, editPost, deletePost} = require('./controllers/posts');
 const {register, login} = require('./controllers/auth');
 const {isAuthenticated} = require('./middleware/isAuthenticated')
+const {sequelize} = require('./util/database')
+const {User} = require('./models/user')
+const {Post} = require('./models/post')
+
+
+User.hasMany(Post)
+Post.belongsTo(User)
 
 const app = express();
 
@@ -25,4 +32,9 @@ app.delete('/posts/:id', isAuthenticated, deletePost);
 
 const {PORT} = process.env;
 
-app.listen(PORT, () => console.log('server successfully running'));
+sequelize.sync()
+.then(() => {
+    app.listen(PORT, () => console.log('server successfully running'));
+})
+.catch(err => console.log(err));
+
