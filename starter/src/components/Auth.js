@@ -1,67 +1,67 @@
-import { useState, useContext } from "react";
-import AuthContext from "../store/authContext";
-import axios from "axios";
+import {useState, useContext} from 'react'
+import axios from 'axios'
+
+import AuthContext from '../store/authContext'
 
 const Auth = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [register, setRegister] = useState(true);
+    const [register, setRegister] = useState(true)
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [message, setMessage] = useState('')
+    const [display, setDisplay] = useState('none')
 
   const authCtx = useContext(AuthContext);
 
-  const submitHandler = (e) => {
-    e.preventDefault();
+  const submitHandler = e => {
+    e.preventDefault()
+
+    setDisplay('none')
 
     const body = {
-      username,
-      password,
-    };
+        username,
+        password
+    }
 
-    axios
-      .post(
-        register
-          ? "https://socialmtn.devmountain.com/register"
-          : "https://socialmtn.devmountain.com/login",
-        body
-      )
-      .then((res) => {
-        console.log("AFTER AUTH", res.data)
-        authCtx.login(res.data.token, res.data.expire, res.data.userId)
-    })
-      .catch((error) => {
-        setUsername("");
-        setPassword("");
-      });
+    // const url = 'https://localhost:4006/'
 
-    console.log("submitHandler called");
-    console.log(username, password);
-  };
+    axios.post(register ? '/register' : '/login', body)
+        .then((res) => {
+            console.log('AFTER AUTH', res.data)
+            authCtx.login(res.data.token, res.data.exp, res.data.userId)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
 
-  return (
+
+  
+return (
     <main>
-      <h1>Welcome!</h1>
-      <form className="form auth-form" onSubmit={submitHandler}>
-        <input
-          className="form-input"
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(event) => setUsername(event.target.value)}
-        />
-        <input
-          className="form-input"
-          type="text"
-          placeholder="Password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-        />
-        <button className="form-btn">{register ? "Sign up" : "Login"}</button>
-      </form>
-      <button className="form-btn">
-        Need to {register ? "Login" : "Sign up"}?
-      </button>
+        <h1>Welcome!</h1>
+        <form className='form auth-form' onSubmit={submitHandler}>
+            <input 
+                type='text' 
+                placeholder='username' 
+                value={username}
+                onChange={e => setUsername(e.target.value)}
+                className='form-input'/>
+            <input 
+                type='password' 
+                placeholder='password' 
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                className='form-input'/>
+            <button className='form-btn'>
+                {register ? 'Sign Up' : 'Login'}
+            </button>
+        </form>
+        <p style={{display: display}} className='auth-msg'>{message}</p>
+        <button className='form-btn' onClick={() => setRegister(!register)}>
+            Need to {register ? 'Login' : 'Sign Up'}?
+        </button>
     </main>
-  );
-};
+)
+}
 
-export default Auth;
+export default Auth

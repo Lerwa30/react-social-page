@@ -11,13 +11,13 @@ const {User} = require('./models/user')
 const {Post} = require('./models/post')
 
 
-User.hasMany(Post)
-Post.belongsTo(User)
-
 const app = express();
 
 app.use(express.json())
 app.use(cors())
+
+User.hasMany(Post)
+Post.belongsTo(User)
 
 app.post('/register', register);
 app.post('/login', login);
